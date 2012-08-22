@@ -1,0 +1,17 @@
+
+html, body {
+	font-family: "Perspective Sans", sans-serif;
+}
+
+div#main {
+	margin: auto;
+	padding: 20px;
+	width: 500px;
+	background: #CCDDEE;
+}
+
+div.quadrant {
+	margin: 15px;
+	padding: 10px;
+	background: #DDEEFF;
+}

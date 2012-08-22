@@ -1,7 +1,27 @@
 @(message: String)
 
-@main("Welcome to Play 2.0") {
+@main("efficientTodoList") {
     
-    @play20.welcome(message)
+    <div ng-app>
     
+	    <div id="urgent-important" class="quadrant">
+	    	<span>Urgent &amp; important</span>
+	    	<li ng-repeat="task in uiTasks">
+	    		{{task.name}}
+	    	</li>
+	    </div>
+	
+	    <div id="urgent" class="quadrant">
+	    	<span>Urgent &amp; not important</span>
+	    </div>
+	
+	    <div id="important" class="quadrant">
+	    	<span>Important but not urgent</span>
+	    </div>
+	    
+	    <div id="not-urgent-not-important" class="quadrant">
+	    	<span>Not urgent &amp; not important</span>
+	    </div>
+ 
+	</div>
 }
