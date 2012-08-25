@@ -6,12 +6,30 @@ html, body {
 div#main {
 	margin: auto;
 	padding: 20px;
-	width: 500px;
+	width: 600px;
 	background: #CCDDEE;
 }
 
 div.quadrant {
+	float: left;
 	margin: 15px;
 	padding: 10px;
+	width: 250px;
 	background: #DDEEFF;
+}
+
+div#urgent-important {
+	background: #FF0040;
+}
+
+div#urgent {
+	background: #F3F781
+}
+
+div#important {
+	background: #EFEFFB;
+}
+
+div.clear {
+	clear: both;
 }
