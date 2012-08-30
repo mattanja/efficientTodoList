@@ -3,10 +3,15 @@ html, body {
 	font-family: "Perspective Sans", sans-serif;
 }
 
+h1 {
+	display: block;
+	text-align: center;
+}
+
 div#main {
 	margin: auto;
 	padding: 20px;
-	width: 600px;
+	width: 800px;
 	background: #CCDDEE;
 }
 
@@ -14,8 +19,45 @@ div.quadrant {
 	float: left;
 	margin: 15px;
 	padding: 10px;
-	width: 250px;
+	width: 350px;
+	height: 350px;
 	background: #DDEEFF;
+	
+	/*
+	overflow-y: auto;
+	overflow-x: hidden;
+	*/
+}
+
+div.quadrant span {
+	text-decoration: underline;
+	margin-bottom: 5pt;
+}
+
+div.quadrant ul {
+	padding: 5pt;
+	margin: 0pt;
+	list-style: none;
+}
+
+div.quadrant li {
+	padding: 6px;
+	margin: 5pt 0pt;
+	background-color: #ffffff;
+	border: 1px solid #B9B9B9;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	
+	z-index: 999;
+}
+
+div.quadrant li a,
+div.quadrant li a:VISITED,
+div.quadrant li a:HOVER
+{
+	text-decoration: underline;
+	color: #333;
 }
 
 div#urgent-important {
@@ -28,6 +70,14 @@ div#urgent {
 
 div#important {
 	background: #EFEFFB;
+}
+
+div.drop-active {
+	background: #ffcccc;
+}
+
+div.drop-hover {
+	background: #FFFFFF;
 }
 
 div.clear {
