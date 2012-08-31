@@ -73,11 +73,11 @@ div#important {
 }
 
 div.drop-active {
-	background: #ffcccc;
+	background: #ffcccc !important;
 }
 
 div.drop-hover {
-	background: #FFFFFF;
+	background: #FFFFFF !important;
 }
 
 div.clear {

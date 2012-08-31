@@ -16,10 +16,9 @@ function TrelloController($scope) {
 	};
 
 	$scope.onAuthorize = function() {
-		$("#trelloAuthorize").empty();
-
 	    Trello.members.get("me", function(member) {
 	    	$scope.$apply(function() {
+	    		$scope.user.authenticated = true;
 	    		$scope.user.name = member.fullName;
 	    		
 	    		$scope.status.msg = "Loading cards...";
@@ -45,30 +44,17 @@ function TrelloController($scope) {
 	    });
 	};
 	
-	Trello.authorize({
-	    interactive:false,
-	    success: $scope.onAuthorize
-	});
-	
-	$("#trelloAuthorize").click(function() {
-	    Trello.authorize({
-	        type: "popup",
-	        success: $scope.onAuthorize
-	    })
-	});
-	
-	$("div.quadrant").droppable({
-		accept: ".cardItem",
-		activeClass: "drop-active",
-		hoverClass: "drop-hover",
-		drop: function(event, ui) {
-			
-		},
-		tolerance: 'pointer',
-	});
+	$scope.onDeauthorize = function() {
+		$scope.$apply(function() {
+			$scope.user.authenticated = false;
+			$scope.user.name = "-";
+			$scope.items = [];
+		});
+	}
 	
 	$scope.user = {
 		name: '-',
+		authenticated: false,
 	};
 	
 	$scope.status = {
@@ -92,4 +78,105 @@ function TrelloController($scope) {
 	$scope.notUrgentNorImportantFilter = function(item) {
 		return !self.itemIsUrgent(item) && !self.itemIsImportant(item);
 	}
+
+	/*
+	 * Application startup...
+	 * TODO: move somewhere else
+	 */
+	
+	Trello.authorize({
+	    interactive:false,
+	    success: $scope.onAuthorize
+	});
+	
+	$("#trelloAuthorize").click(function() {
+	    Trello.authorize({
+	        type: "popup",
+	        success: $scope.onAuthorize
+	    })
+	});
+	
+	$("#trelloLogout").click(function() {
+		Trello.deauthorize();
+		$scope.onDeauthorize();
+	});
+	
+	$("#urgent-important").droppable({
+		accept: ".cardItem",
+		activeClass: "drop-active",
+		hoverClass: "drop-hover",
+		drop: function(event, ui) {
+			var item = angular.element(ui.draggable.context).scope().item;
+			if (item) {
+				$scope.$apply(function() {
+					if (!self.itemIsUrgent(item)) {
+						item.due = new Date();
+					}
+					
+					if (!self.itemIsImportant(item)) {
+						item.labels.push("red");
+					}
+				});
+			}
+		},
+		tolerance: 'pointer',
+	});
+
+	$("important").droppable({
+		accept: ".cardItem",
+		activeClass: "drop-active",
+		hoverClass: "drop-hover",
+		drop: function(event, ui) {
+			var item = angular.element(ui.draggable.context).scope().item;
+			if (item) {
+				$scope.$apply(function() {
+					if (self.itemIsUrgent(item)) {
+						item.due = null
+					}
+					
+					if (!self.itemIsImportant(item)) {
+						item.labels.push("red");
+					}
+				});
+			}
+		},
+		tolerance: 'pointer',
+	});
+
+	$("#urgent").droppable({
+		accept: ".cardItem",
+		activeClass: "drop-active",
+		hoverClass: "drop-hover",
+		drop: function(event, ui) {
+			var item = angular.element(ui.draggable.context).scope().item;
+			if (item) {
+				$scope.$apply(function() {
+					if (!self.itemIsUrgent(item)) {
+						item.due = new Date();
+					}
+					
+					if (self.itemIsImportant(item)) {
+						item.labels = [];
+					}
+				});
+			}
+		},
+		tolerance: 'pointer',
+	});
+	
+	$("#not-urgent-not-important").droppable({
+		accept: ".cardItem",
+		activeClass: "drop-active",
+		hoverClass: "drop-hover",
+		drop: function(event, ui) {
+			var item = angular.element(ui.draggable.context).scope().item;
+			if (item) {
+				$scope.$apply(function() {
+					item.due = null;
+					item.labels = [];
+				});
+			}
+		},
+		tolerance: 'pointer',
+	});
 }

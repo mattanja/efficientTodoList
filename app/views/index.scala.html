@@ -1,12 +1,18 @@
 @main("efficientTodoList") {
     
     <h1>Efficient Trello-List</h1>
-    <a id="trelloAuthorize" href="#">Connect to Trello</a>
     
     <div ng-app>
     <div ng-controller="TrelloController" id="TrelloController">
     
-    	<div ng-model="user">{{user.name}}</div>
+    	<div ng-model="user">
+			<a ng-hide="user.authenticated" id="trelloAuthorize" href="#">Connect to Trello</a>
+			<div ng-show="user.authenticated">
+	    		<div style="float: left;">{{user.name}}</div>
+	    		<a style="float: right;" id="trelloLogout">Logout</a>
+    			<div style="clear: both;"></div>
+			</div> 
+    	</div>
     	
 	    <div id="urgent-important" class="quadrant">
 	    	<span>Urgent &amp; important</span>
