@@ -1,5 +1,14 @@
-efficientTodoList
-=====================================
+First things first - efficient to-do list
+=========================================
 
-This is a test project to learn play! framework, cappuccino framework and/or
-angularjs.
+This project is a small test project I started to learn play! framework and angularjs.
+
+The idea of the list is inspired by the time matrix of Stephen Covey (The Seven Habits of Highly Effective People). Every item is a http://www.trello.com card. Items are considered as "urgent" when the due date is close to the current date and items can be marked as "important" with a label of the Trello card.
+
+The current state of the application can be found here: http://firstthingsfirst.herokuapp.com/
+
+Resources
+=========
+http://www.playframework.org/
+http://angularjs.org/
+http://www.whitedovebooks.co.uk/7-habits/7-habits.htm
