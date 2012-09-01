@@ -22,11 +22,11 @@ div.quadrant {
 	width: 350px;
 	height: 350px;
 	background: #DDEEFF;
-	
+
 	/*
 	overflow-y: auto;
-	overflow-x: hidden;
 	*/
+	overflow-x: hidden;
 }
 
 div.quadrant span {
@@ -52,12 +52,18 @@ div.quadrant li {
 	z-index: 999;
 }
 
-div.quadrant li a,
-div.quadrant li a:VISITED,
-div.quadrant li a:HOVER
+li.card a,
+li.card a:VISITED,
+li.card a:HOVER
 {
 	text-decoration: underline;
 	color: #333;
+}
+
+li.card span.due {
+	display: block;
+	font-size: 7pt;
+	text-align: right;
 }
 
 div#urgent-important {

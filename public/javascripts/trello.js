@@ -7,11 +7,11 @@
 
 function TrelloController($scope) {
 	var self = this;
-	this.itemIsImportant = function(item) {
+	this.cardIsImportant = function(item) {
 		return (item.labels.length > 0);
 	};
 	
-	this.itemIsUrgent = function(item) {
+	this.cardIsUrgent = function(item) {
 		return (item.due != null);
 	};
 
@@ -28,17 +28,17 @@ function TrelloController($scope) {
 	        // is assigned to
 	        Trello.get("members/me/cards", function(cards) {
 	        	$scope.$apply(function(){
-	            	$scope.items = [];
+	            	$scope.cards = [];
 	        		$.each(cards, function(ix, card) {
-	                	$scope.items.push(card);
+	                	$scope.cards.push(card);
 	            	});
 	        		$scope.status.msg = "Cards loaded.";
 	            });
 	        	
-	        	$("li.cardItem").draggable({
+	        	$("li.card").draggable({
 	        		containment: "document",
 	        		revert: true,
-	        		stack: "li.cardItem",
+	        		stack: "li.card",
 				});
 	        });
 	    });
@@ -48,7 +48,7 @@ function TrelloController($scope) {
 		$scope.$apply(function() {
 			$scope.user.authenticated = false;
 			$scope.user.name = "-";
-			$scope.items = [];
+			$scope.cards = [];
 		});
 	}
 	
@@ -61,22 +61,22 @@ function TrelloController($scope) {
 		msg: '',
 	}
 	
-	$scope.items = [];
+	$scope.cards = [];
 
 	$scope.urgentAndImportantFilter = function(item) {
-		return self.itemIsUrgent(item) && self.itemIsImportant(item);
+		return self.cardIsUrgent(item) && self.cardIsImportant(item);
 	}
 
 	$scope.importantFilter = function(item) {
-		return self.itemIsImportant(item) && !self.itemIsUrgent(item);
+		return self.cardIsImportant(item) && !self.cardIsUrgent(item);
 	}
 	
 	$scope.urgentFilter = function(item) {
-		return self.itemIsUrgent(item) && !self.itemIsImportant(item);
+		return self.cardIsUrgent(item) && !self.cardIsImportant(item);
 	}
 
 	$scope.notUrgentNorImportantFilter = function(item) {
-		return !self.itemIsUrgent(item) && !self.itemIsImportant(item);
+		return !self.cardIsUrgent(item) && !self.cardIsImportant(item);
 	}
 
 	/*
@@ -86,13 +86,15 @@ function TrelloController($scope) {
 	
 	Trello.authorize({
 	    interactive:false,
-	    success: $scope.onAuthorize
+	    success: $scope.onAuthorize,
+	    scope: { write: true, read: true }
 	});
 	
 	$("#trelloAuthorize").click(function() {
 	    Trello.authorize({
 	        type: "popup",
-	        success: $scope.onAuthorize
+	        success: $scope.onAuthorize,
+	        scope: { write: true, read: true }
 	    })
 	});
 	
@@ -102,41 +104,53 @@ function TrelloController($scope) {
 	});
 	
 	$("#urgent-important").droppable({
-		accept: ".cardItem",
+		accept: ".card",
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
 			var item = angular.element(ui.draggable.context).scope().item;
 			if (item) {
 				$scope.$apply(function() {
-					if (!self.itemIsUrgent(item)) {
+					if (!self.cardIsUrgent(item)) {
 						item.due = new Date();
 					}
 					
-					if (!self.itemIsImportant(item)) {
+					if (!self.cardIsImportant(item)) {
 						item.labels.push("red");
 					}
+				});
+				
+	        	$("li.card").draggable({
+	        		containment: "document",
+	        		revert: true,
+	        		stack: "li.card",
 				});
 			}
 		},
 		tolerance: 'pointer',
 	});
 
-	$("important").droppable({
-		accept: ".cardItem",
+	$("#important").droppable({
+		accept: ".card",
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
 			var item = angular.element(ui.draggable.context).scope().item;
 			if (item) {
 				$scope.$apply(function() {
-					if (self.itemIsUrgent(item)) {
+					if (self.cardIsUrgent(item)) {
 						item.due = null
 					}
 					
-					if (!self.itemIsImportant(item)) {
+					if (!self.cardIsImportant(item)) {
 						item.labels.push("red");
 					}
+				});
+				
+	        	$("li.card").draggable({
+	        		containment: "document",
+	        		revert: true,
+	        		stack: "li.card",
 				});
 			}
 		},
@@ -144,28 +158,56 @@ function TrelloController($scope) {
 	});
 
 	$("#urgent").droppable({
-		accept: ".cardItem",
+		accept: ".card",
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
-			var item = angular.element(ui.draggable.context).scope().item;
-			if (item) {
+			var card = angular.element(ui.draggable.context).scope().card;
+			if (card) {
+				// "2012-09-02T10:00:00.000Z"
+				//var newdate = $.datepicker.formatDate('yyyy-mm-ddTHH:')
+				
+				Trello.put(
+					"cards/" + card.id + "/due",
+					{ value: (new Date()).toJSON(), },
+					function(newCard) {
+						$scope.$apply(function() {
+							var oldCards = $scope.cards;
+							$scope.cards = [];
+							$scope.cards.push(newCard);
+							angular.forEach(oldCards, function(c) {
+								if (c.id != card.id) {
+									$scope.cards.push(c);
+								}
+							})
+						});
+					}
+				);
+				
+				/*
 				$scope.$apply(function() {
-					if (!self.itemIsUrgent(item)) {
-						item.due = new Date();
+					if (!self.cardIsUrgent(card)) {
+						card.due = new Date();
 					}
 					
-					if (self.itemIsImportant(item)) {
+					if (self.cardIsImportant(item)) {
 						item.labels = [];
 					}
 				});
+				
+	        	$("li.card").draggable({
+	        		containment: "document",
+	        		revert: true,
+	        		stack: "li.card",
+				});
+				*/
 			}
 		},
 		tolerance: 'pointer',
 	});
 	
 	$("#not-urgent-not-important").droppable({
-		accept: ".cardItem",
+		accept: ".card",
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
@@ -174,6 +216,12 @@ function TrelloController($scope) {
 				$scope.$apply(function() {
 					item.due = null;
 					item.labels = [];
+				});
+				
+	        	$("li.card").draggable({
+	        		containment: "document",
+	        		revert: true,
+	        		stack: "li.card",
 				});
 			}
 		},
