@@ -36,9 +36,17 @@ function TrelloController($scope) {
 	            });
 	        	
 	        	$("li.card").draggable({
-	        		containment: "document",
+	        		appendTo: 'body',
+	        		containment: 'window',
+	        		helper: 'clone',
 	        		revert: true,
 	        		stack: "li.card",
+	        		start: function(){
+	        			$(this).hide();
+	        		},
+	        		stop: function(){
+	        			$(this).show();
+	        		}
 				});
 	        });
 	    });
@@ -50,7 +58,7 @@ function TrelloController($scope) {
 			$scope.user.name = "-";
 			$scope.cards = [];
 		});
-	}
+	};
 	
 	$scope.user = {
 		name: '-',
@@ -65,20 +73,31 @@ function TrelloController($scope) {
 
 	$scope.urgentAndImportantFilter = function(item) {
 		return self.cardIsUrgent(item) && self.cardIsImportant(item);
-	}
+	};
 
 	$scope.importantFilter = function(item) {
 		return self.cardIsImportant(item) && !self.cardIsUrgent(item);
-	}
+	};
 	
 	$scope.urgentFilter = function(item) {
 		return self.cardIsUrgent(item) && !self.cardIsImportant(item);
-	}
+	};
 
 	$scope.notUrgentNorImportantFilter = function(item) {
 		return !self.cardIsUrgent(item) && !self.cardIsImportant(item);
-	}
+	};
 
+	$scope.replaceCard = function(newCard) {
+		var oldCards = $scope.cards;
+		$scope.cards = [];
+		$scope.cards.push(newCard);
+		angular.forEach(oldCards, function(c) {
+			if (c.id != card.id) {
+				$scope.cards.push(c);
+			}
+		})
+	};
+	
 	/*
 	 * Application startup...
 	 * TODO: move somewhere else
@@ -135,23 +154,23 @@ function TrelloController($scope) {
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
-			var item = angular.element(ui.draggable.context).scope().item;
-			if (item) {
-				$scope.$apply(function() {
-					if (self.cardIsUrgent(item)) {
-						item.due = null
-					}
-					
-					if (!self.cardIsImportant(item)) {
-						item.labels.push("red");
-					}
-				});
+			var card = angular.element(ui.draggable.context).scope().card;
+			if (card) {
+				if (self.cardIsUrgent(card)) {
+					Trello.put(
+						"cards/" + card.id + "/due",
+						{ value: null, },
+						function(newCard) {
+							$scope.$apply(function() {
+								$scope.replaceCard(newCard);
+							});
+						}
+					);
+				}
 				
-	        	$("li.card").draggable({
-	        		containment: "document",
-	        		revert: true,
-	        		stack: "li.card",
-				});
+				if (!self.cardIsImportant(card)) {
+					// TODO add label
+				}
 			}
 		},
 		tolerance: 'pointer',
@@ -164,43 +183,21 @@ function TrelloController($scope) {
 		drop: function(event, ui) {
 			var card = angular.element(ui.draggable.context).scope().card;
 			if (card) {
-				// "2012-09-02T10:00:00.000Z"
-				//var newdate = $.datepicker.formatDate('yyyy-mm-ddTHH:')
+				if (!self.cardIsUrgent(card)) {
+					Trello.put(
+						"cards/" + card.id + "/due",
+						{ value: (new Date()).toJSON(), },
+						function(newCard) {
+							$scope.$apply(function() {
+								$scope.replaceCard(newCard);
+							});
+						}
+					);
+				}
 				
-				Trello.put(
-					"cards/" + card.id + "/due",
-					{ value: (new Date()).toJSON(), },
-					function(newCard) {
-						$scope.$apply(function() {
-							var oldCards = $scope.cards;
-							$scope.cards = [];
-							$scope.cards.push(newCard);
-							angular.forEach(oldCards, function(c) {
-								if (c.id != card.id) {
-									$scope.cards.push(c);
-								}
-							})
-						});
-					}
-				);
-				
-				/*
-				$scope.$apply(function() {
-					if (!self.cardIsUrgent(card)) {
-						card.due = new Date();
-					}
-					
-					if (self.cardIsImportant(item)) {
-						item.labels = [];
-					}
-				});
-				
-	        	$("li.card").draggable({
-	        		containment: "document",
-	        		revert: true,
-	        		stack: "li.card",
-				});
-				*/
+				if (self.cardIsImportant(card)) {
+					// TODO remove label (or ask user whether to remove the label)
+				}
 			}
 		},
 		tolerance: 'pointer',

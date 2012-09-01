@@ -1,6 +1,6 @@
 @main("efficientTodoList") {
     
-    <h1>First things first Trello-List</h1>
+    <h1>First things first</h1>
     
     <div ng-app>
     <div ng-controller="TrelloController" id="TrelloController">
@@ -15,7 +15,7 @@
     	</div>
     	
 	    <div id="urgent-important" class="quadrant">
-	    	<span>Urgent &amp; important</span>
+	    	<h2>Urgent &amp; important</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:urgentAndImportantFilter">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
@@ -24,7 +24,7 @@
 	    </div>
 
 	    <div id="important" class="quadrant">
-	    	<span>Important but not urgent</span>
+	    	<h2>Important but not urgent</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:importantFilter">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
@@ -34,7 +34,7 @@
 	    <div class="clear"></div>
 
 	    <div id="urgent" class="quadrant">
-	    	<span>Urgent but not important</span>
+	    	<h2>Urgent but not important</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
@@ -43,7 +43,7 @@
 	    </div>
 	
 	    <div id="not-urgent-not-important" class="quadrant">
-	    	<span>Not urgent &amp; not important</span>
+	    	<h2>Not urgent &amp; not important</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:notUrgentNorImportantFilter">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>

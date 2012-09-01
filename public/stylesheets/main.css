@@ -1,9 +1,12 @@
 
 html, body {
 	font-family: "Perspective Sans", sans-serif;
+	font-size: 12pt;
+	background: #F0F0F0;
 }
 
 h1 {
+	font-size: 15pt;
 	display: block;
 	text-align: center;
 }
@@ -17,11 +20,13 @@ div#main {
 
 div.quadrant {
 	float: left;
-	margin: 15px;
+	margin: 13px;
 	padding: 10px;
 	width: 350px;
 	height: 350px;
 	background: #DDEEFF;
+	border: 2px solid #B9B9B9;
+	border-radius: 7px;
 
 	/*
 	overflow-y: auto;
@@ -29,27 +34,34 @@ div.quadrant {
 	overflow-x: hidden;
 }
 
-div.quadrant span {
-	text-decoration: underline;
-	margin-bottom: 5pt;
+div.quadrant h2 {
+	text-align: center;
+	font-size: 12pt;
+	text-decoration: none;
+	margin: 5pt;
+	margin-bottom: 7pt;
 }
 
 div.quadrant ul {
-	padding: 5pt;
+	padding: 0pt;
 	margin: 0pt;
 	list-style: none;
 }
 
-div.quadrant li {
+li.card {
 	padding: 6px;
 	margin: 5pt 0pt;
 	background-color: #ffffff;
 	border: 1px solid #B9B9B9;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 	
 	z-index: 999;
+	
+	/* For dragging */
+	min-width: 320px;
+	list-style: none;
 }
 
 li.card a,
@@ -67,15 +79,15 @@ li.card span.due {
 }
 
 div#urgent-important {
-	background: #FF0040;
+	background: #FF6666;
 }
 
 div#urgent {
-	background: #F3F781
+	background: #FFFF99;
 }
 
 div#important {
-	background: #EFEFFB;
+	background: #CCEEFF;
 }
 
 div.drop-active {
