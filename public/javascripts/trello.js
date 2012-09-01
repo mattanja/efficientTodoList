@@ -29,7 +29,7 @@ function TrelloController($scope) {
 	        Trello.get("members/me/cards", function(cards) {
 	        	$scope.$apply(function(){
 	            	$scope.cards = [];
-	        		$.each(cards, function(ix, card) {
+	            	angular.forEach(cards, function(card) {
 	                	$scope.cards.push(card);
 	            	});
 	        		$scope.status.msg = "Cards loaded.";
@@ -91,15 +91,15 @@ function TrelloController($scope) {
 		var oldCards = $scope.cards;
 		$scope.cards = [];
 		$scope.cards.push(newCard);
-		angular.forEach(oldCards, function(c) {
-			if (c.id != card.id) {
-				$scope.cards.push(c);
+		angular.forEach(oldCards, function(card) {
+			if (newCard.id != card.id) {
+				$scope.cards.push(card);
 			}
-		})
+		});
 	};
 	
 	/*
-	 * Application startup...
+	 * Application startup code / jQuery handling of elements
 	 * TODO: move somewhere else
 	 */
 	
@@ -113,7 +113,8 @@ function TrelloController($scope) {
 	    Trello.authorize({
 	        type: "popup",
 	        success: $scope.onAuthorize,
-	        scope: { write: true, read: true }
+	        scope: { write: true, read: true },
+	        name: "First things first",
 	    })
 	});
 	

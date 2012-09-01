@@ -15,7 +15,11 @@ div#main {
 	margin: auto;
 	padding: 20px;
 	width: 800px;
-	background: #CCDDEE;
+	background: #F9F9F9;
+
+	border-radius: 30px;
+	-moz-border-radius: 30px;
+	-webkit-border-radius: 30px;
 }
 
 div.quadrant {
@@ -26,7 +30,9 @@ div.quadrant {
 	height: 350px;
 	background: #DDEEFF;
 	border: 2px solid #B9B9B9;
-	border-radius: 7px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 
 	/*
 	overflow-y: auto;
