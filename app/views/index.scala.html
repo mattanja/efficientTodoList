@@ -17,7 +17,7 @@
 	    <div id="urgent-important" class="quadrant">
 	    	<h2>Urgent &amp; important</h2>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:urgentAndImportantFilter">
+		    	<li class="card" ng-repeat="card in cards | filter:urgentAndImportantFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
 		    	</li>
 	    	</ul>
@@ -26,7 +26,7 @@
 	    <div id="important" class="quadrant">
 	    	<h2>Important but not urgent</h2>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:importantFilter">
+		    	<li class="card" ng-repeat="card in cards | filter:importantFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
 		    	</li>
 	    	</ul>
@@ -36,7 +36,7 @@
 	    <div id="urgent" class="quadrant">
 	    	<h2>Urgent but not important</h2>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter">
+		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
 		    	</li>
 	    	</ul>
@@ -45,7 +45,7 @@
 	    <div id="not-urgent-not-important" class="quadrant">
 	    	<h2>Not urgent &amp; not important</h2>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:notUrgentNorImportantFilter">
+		    	<li class="card" ng-repeat="card in cards | filter:notUrgentNorImportantFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
 		    	</li>
 	    	</ul>
