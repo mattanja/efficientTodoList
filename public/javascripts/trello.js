@@ -70,6 +70,8 @@ function TrelloController($scope) {
 	}
 	
 	$scope.cards = [];
+	
+	$scope.labels = ['green','yellow','orange','red','purple','blue'];
 
 	$scope.urgentAndImportantFilter = function(item) {
 		return self.cardIsUrgent(item) && self.cardIsImportant(item);
