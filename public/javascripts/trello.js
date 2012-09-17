@@ -71,7 +71,19 @@ function TrelloController($scope) {
 	
 	$scope.cards = [];
 	
-	$scope.labels = ['green','yellow','orange','red','purple','blue'];
+	$scope.settings = {
+		labels: ['green','yellow','orange','red','purple','blue'],
+		selectedLabel: "red",
+		urgentDate: new Date(),
+		selectedBoard: "allAssigned",
+		boards: [
+	        { id: "allAssigned", name: "All cards assigned to me", },
+	        { id: "allVisible", name: "All cards visible to me", },
+		    { id: "abc", name: "ABC", },
+		    { id: "def", name: "DEF", },
+		    { id: "geh", name: "GEH", },
+        ],
+	};
 
 	$scope.urgentAndImportantFilter = function(item) {
 		return self.cardIsUrgent(item) && self.cardIsImportant(item);
@@ -105,11 +117,15 @@ function TrelloController($scope) {
 	 * TODO: move somewhere else
 	 */
 	
+	/*
+	 * commented out for offline development
+	 * TODO: modularize and make fault tolerant
 	Trello.authorize({
 	    interactive:false,
 	    success: $scope.onAuthorize,
 	    scope: { write: true, read: true }
 	});
+	*/
 	
 	$("#trelloAuthorize").click(function() {
 	    Trello.authorize({

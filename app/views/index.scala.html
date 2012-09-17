@@ -5,14 +5,34 @@
     <div ng-app>
     <div ng-controller="TrelloController" id="TrelloController">
     
-    	<div ng-model="user">
+    	<div>
 			<a ng-hide="user.authenticated" id="trelloAuthorize" href="#">Connect to Trello</a>
 			<div ng-show="user.authenticated">
 	    		<div style="float: left;">{{user.name}}</div>
 	    		<a style="float: right;" id="trelloLogout">Logout</a>
     			<div style="clear: both;"></div>
-			</div> 
+			</div>
     	</div>
+    	
+    	<div>
+    		<label for="settingsBoard">Board:</label>
+    		<select
+    			ng-model="settings.selectedBoard"
+    			ng-options="board.id as board.name for board in settings.boards"
+    			></select>
+    		<label for="settingsUrgentDate">Due before:</label>
+    		<input
+    			id="settingsUrgentDate"
+    			value="{{settings.urgentDate | date:'short'}}"
+    			/>
+    		<label for="settingsSelectedLabel">Important label: </label>
+	    	<select
+	    		id="settingsSelectedLabel"
+	    		ng-model="settings.selectedLabel"
+	    		ng-options="label for label in settings.labels"
+	    		ng-style="{'background-color': settings.selectedLabel}"></select>
+    	</div>
+    	
     	
 	    <div id="urgent-important" class="quadrant">
 	    	<h2>Urgent &amp; important</h2>
@@ -24,7 +44,7 @@
 	    </div>
 
 	    <div id="important" class="quadrant">
-	    	<h2>Important but not urgent</h2>
+	    	<h2>Important (but not urgent)</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:importantFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
@@ -34,7 +54,7 @@
 	    <div class="clear"></div>
 
 	    <div id="urgent" class="quadrant">
-	    	<h2>Urgent but not important</h2>
+	    	<h2>Urgent (but not important)</h2>
 	    	<ul>
 		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter | orderBy:'-due'">
 		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
@@ -54,4 +74,11 @@
  
 	</div>
 	</div>
+	
+<script>
+$(function() {
+	$( "#settingsUrgentDate" ).datepicker();
+});
+</script>
+
 }
