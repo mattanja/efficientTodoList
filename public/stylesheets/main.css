@@ -60,14 +60,29 @@ div.quadrant {
 	overflow-x: hidden;
 }
 
-div.quadrant h2 {
+div.quadrant div.header {
+	position: relative;
+	text-align: center;
+	margin: 0pt;
+	padding: 2pt;
+	background-color: #fff;
+	border-radius: 7px 7px 0px 0px;
+	-moz-border-radius: 7px 7px 0px 0px;
+	-webkit-border-radius: 7px 7px 0px 0px;
+}
+
+div.quadrant div.header h2 {
+	display: inline;
 	text-align: center;
 	font-size: 12pt;
 	text-decoration: none;
 	margin: 0pt;
-	margin-bottom: 7pt;
-	padding: 2pt;
-	background-color: #fff;
+	padding: 0pt;
+}
+
+div.quadrant div.header button {
+	position: absolute;
+	right: 7px;
 }
 
 div.quadrant ul {
@@ -78,7 +93,7 @@ div.quadrant ul {
 
 li.card {
 	padding: 6px;
-	margin: 5pt 0pt;
+	margin: 3pt 2pt;
 	background-color: #ffffff;
 	border: 1px solid #B9B9B9;
 	border-radius: 5px;

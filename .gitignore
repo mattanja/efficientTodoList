@@ -10,3 +10,6 @@ dist
 .project
 .settings
 target_bak
+.cache
+.target
+bin

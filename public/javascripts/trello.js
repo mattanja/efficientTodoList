@@ -7,13 +7,6 @@
 
 function TrelloController($scope) {
 	var self = this;
-	this.cardIsImportant = function(item) {
-		return (item.labels.length > 0);
-	};
-	
-	this.cardIsUrgent = function(item) {
-		return (item.due != null);
-	};
 
 	$scope.onAuthorize = function() {
 	    Trello.members.get("me", function(member) {
@@ -85,20 +78,30 @@ function TrelloController($scope) {
         ],
 	};
 
+	$scope.cardIsImportant = function(item) {
+		return (item.labels.length > 0)
+			&& item.labels.some(function(i) { return i == $scope.settings.selectedLabel });
+	};
+	
+	$scope.cardIsUrgent = function(item) {
+		return (item.due != null)
+			&& item.due > $scope.settings.urgentDate;
+	};
+	
 	$scope.urgentAndImportantFilter = function(item) {
-		return self.cardIsUrgent(item) && self.cardIsImportant(item);
+		return $scope.cardIsUrgent(item) && $scope.cardIsImportant(item);
 	};
 
 	$scope.importantFilter = function(item) {
-		return self.cardIsImportant(item) && !self.cardIsUrgent(item);
+		return $scope.cardIsImportant(item) && !$scope.cardIsUrgent(item);
 	};
 	
 	$scope.urgentFilter = function(item) {
-		return self.cardIsUrgent(item) && !self.cardIsImportant(item);
+		return $scope.cardIsUrgent(item) && !$scope.cardIsImportant(item);
 	};
 
 	$scope.notUrgentNorImportantFilter = function(item) {
-		return !self.cardIsUrgent(item) && !self.cardIsImportant(item);
+		return !$scope.cardIsUrgent(item) && !$scope.cardIsImportant(item);
 	};
 
 	$scope.replaceCard = function(newCard) {
@@ -110,6 +113,21 @@ function TrelloController($scope) {
 				$scope.cards.push(card);
 			}
 		});
+	};
+	
+	/**
+	 * add new card (from frontend).
+	 */
+	$scope.addCard = function() {
+		var newCard = {
+			name: "New card...",
+			done: false,
+			url: "http://trello.com/abcd",
+			due: new Date(),
+			labels: ["red"],
+		};
+		
+		$scope.cards.push(newCard);
 	};
 	
 	/*
