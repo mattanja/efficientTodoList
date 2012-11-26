@@ -11,24 +11,70 @@ h1 {
 	text-align: center;
 }
 
-div#toc {
-	width: 200px;
-	position: fixed;
+a#about-container-trigger {
+	/* display: block; */
+	width: 100px;
+	position: absolute;
+	top: 90px;
 	right: 0px;
+	
+	z-index: 2;
+
+	text-decoration: none;
+	font-size: 16px;
+	letter-spacing:-1px;
+	padding: 20px 10px 17px 45px;
+	font-weight: 700;
+	background:#ffffff url(../images/plus.png) 15% 50% no-repeat;
+	border: 2px solid #B9B9B9;
+	-moz-border-radius-topleft: 20px;
+	-webkit-border-top-left-radius: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	-webkit-border-bottom-left-radius: 20px;
 }
 
-div#toc div {
+a#about-container-trigger:hover {
+	background:#eeeeee url(../images/plus.png) 15% 50% no-repeat;
+}
+
+a#about-container-trigger.active {
+	background:#ffffff url(../images/minus.png) 15% 50% no-repeat;
+}
+
+div#about-container {
+	display: none;
+	width: 600px;
+	position: absolute;
+	right: 0px;
+	top: 70px;
+	
+	padding: 10px 160px 10px 10px;
+	background: #ffffff;
+	
+	filter: alpha(opacity=90);
+	opacity: .9;
+	
+	border: 2px solid #B9B9B9;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	
+	z-index: 1;
+}
+
+div#about-container div {
 	background: #ffffff;
 }
 
-div#toc h2 {
+div#about-container h2 {
 	font-size: 12pt;
 	background: #ffffff;
 }
 
-div#toc span {
-	display: none;
-	margin: 5px;
+div#about-container span {
+	/* display: none; */
+	/* margin: 5px; */
+	text-align: justify;
 }
 
 div#main {

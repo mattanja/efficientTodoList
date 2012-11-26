@@ -35,16 +35,26 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+  
+  $(document).ready(function(){
+      $("a#about-container-trigger").click(function(){
+          $("div#about-container").toggle(500);
+          $(this).toggleClass("active");
+          return false;
+      });
+  });
+  </script>
+
 </script>
     </head>
     <body>
 
-<div id="toc">    	
+<div id="about-container">    	
 	<div id="about">
-		<h2 onclick="$('#about-content').toggle();">About</h2>
+		<h2>About</h2>
 		<span id="about-content">
 			The idea for this simple yet powerful application has been inspired
-			by the famous book &quot;The Seven Habits of Highly Effective People&quot;.
+			by the book &quot;The Seven Habits of Highly Effective People&quot;.
 			Trello is such a great and useful tool that it is used as the store
 			of the items - in that sense &quot;First things first&quot; is just
 			another view on your Trello cards providing an effective and efficient
@@ -53,7 +63,7 @@
 	</div>
 		
 	<div id="aboutMe">
-		<h2 onclick="$('#aboutMe-content').toggle();">About me</h2>
+		<h2>About me</h2>
 		<span id="aboutMe-content">
 			Mattanja Kern is the creator of this application. Initially the idea
 			has been to create a sample application to learn AngularJS.
@@ -64,13 +74,14 @@
 	</div>
 	
 	<div id="feedback">
-		<h2 onclick="$('#feedback-content').toggle();">Feedback</h2>
+		<h2>Feedback</h2>
 		<span id="feedback-content">
 			Feedback of any form is welcome via email or in case of a bug report
 			or feature request at <a href="https://github.com/mattanja/efficientTodoList">https://github.com/mattanja/efficientTodoList</a>
 		</span>
 	</div>
 </div>
+<a id="about-container-trigger">About &amp; Infos</a>
 
 <div id="main">
 	@content
