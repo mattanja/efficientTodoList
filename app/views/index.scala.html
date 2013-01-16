@@ -1,8 +1,8 @@
-@main("efficientTodoList") {
+@main("first things first") {
     
     <h1>First things first</h1>
     
-    <div ng-app>
+    <div ng-app="ftf">
     <div ng-controller="TrelloController" id="TrelloController">
     
     	<div>
@@ -22,8 +22,8 @@
     			></select>
     		<label for="settingsUrgentDate">Urgent when due before:</label>
     		<input
-    			id="settingsUrgentDate"
-    			value="{{settings.urgentDate | date:'short'}}"
+    			ui-date
+    			ng-model="settings.urgentDate"
     			/>
     		<label for="settingsSelectedLabel">Important label: </label>
 	    	<select
@@ -33,7 +33,7 @@
 	    		ng-style="{'background-color': settings.selectedLabel}"></select>
     		<br />
     		Selected board: {{settings.selectedBoard}}
-    		- Urgent before: {{settings.urgentDate}}
+    		- Urgent before: {{settings.urgentDate | date: 'yyyy-MM-dd HH:mm:ss Z' }}
     	</div>
     	
     	
@@ -43,8 +43,8 @@
 	    		<button ng-click="addCard()">+</button>
     		</div>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:urgentAndImportantFilter | orderBy:'-due'">
-		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
+		    	<li class="card" ng-repeat="card in cards | filter:urgentAndImportantFilter | orderBy:'-due'" make-draggable>
+		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date: 'yyyy-MM-dd HH:mm:ss Z'}}</span>
 		    	</li>
 	    	</ul>
 	    </div>
@@ -52,8 +52,8 @@
 	    <div id="important" class="quadrant">
 	    	<div class="header"><h2>Important (but not urgent)</h2></div>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:importantFilter | orderBy:'-due'">
-		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
+		    	<li class="card" ng-repeat="card in cards | filter:importantFilter | orderBy:'-due'" make-draggable>
+		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date: 'yyyy-MM-dd HH:mm:ss Z'}}</span>
 		    	</li>
 	    	</ul>
 	    </div>
@@ -62,8 +62,8 @@
 	    <div id="urgent" class="quadrant">
 	    	<div class="header"><h2>Urgent (but not important)</h2></div>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter | orderBy:'-due'">
-		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
+		    	<li class="card" ng-repeat="card in cards | filter:urgentFilter | orderBy:'-due'" make-draggable>
+		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date: 'yyyy-MM-dd HH:mm:ss Z'}}</span>
 		    	</li>
 	    	</ul>
 	    </div>
@@ -73,12 +73,16 @@
 	    		<h2>Not urgent &amp; not important</h2>
     		</div>
 	    	<ul>
-		    	<li class="card" ng-repeat="card in cards | filter:notUrgentNorImportantFilter | orderBy:'-due'">
-		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date:'short'}}</span>
+		    	<li class="card" ng-repeat="card in cards | filter:notUrgentNorImportantFilter | orderBy:'-due'" make-draggable>
+		    		<input type="checkbox" ng-model="card.done" /><a href="{{card.url}}">{{card.name}}</a><span class="due">{{card.due | date: 'yyyy-MM-dd HH:mm:ss Z'}}</span>
 		    	</li>
 	    	</ul>
 	    </div>
 	    <div class="clear"></div>
+ 
+ <ul>
+ <li class="log-item" ng-repeat="logitem in log">{{logitem}}</li>
+ </ul>
  
 	</div>
 	</div>

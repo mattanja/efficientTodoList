@@ -27,10 +27,10 @@ a#about-container-trigger {
 	font-weight: 700;
 	background:#ffffff url(../images/plus.png) 15% 50% no-repeat;
 	border: 2px solid #B9B9B9;
-	-moz-border-radius-topleft: 20px;
-	-webkit-border-top-left-radius: 20px;
-	-moz-border-radius-bottomleft: 20px;
-	-webkit-border-bottom-left-radius: 20px;
+	border-right: none;
+	border-radius: 20px 0px 0px 20px;
+	-moz-border-radius: 20px 0px 0px 20px;
+	-webkit-border-radius: 20px 0px 0px 20px;
 }
 
 a#about-container-trigger:hover {
@@ -55,9 +55,10 @@ div#about-container {
 	opacity: .9;
 	
 	border: 2px solid #B9B9B9;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
+	border-right: none;
+	border-radius: 10px 0px 0px 10px;
+	-moz-border-radius: 10px 0px 0px 10px;
+	-webkit-border-radius: 10px 0px 0px 10px;
 	
 	z-index: 1;
 }

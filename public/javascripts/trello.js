@@ -5,6 +5,27 @@
  * 
  */
 
+/*
+ * Create directive to be called by list-elements to make them draggable
+ */
+angular.module('ftf', ['ui.directives']).directive('makeDraggable', function() {
+    return function(scope, elm, attr) {
+    	$(elm).draggable({
+    		appendTo: 'body',
+    		containment: 'window',
+    		helper: 'clone',
+    		revert: true,
+    		stack: "li.card",
+    		start: function(){
+    			$(this).hide();
+    		},
+    		stop: function(){
+    			$(this).show();
+    		}
+		});
+    };
+});
+
 function TrelloController($scope) {
 	var self = this;
 
@@ -28,19 +49,7 @@ function TrelloController($scope) {
 	        		$scope.status.msg = "Cards loaded.";
 	            });
 	        	
-	        	$("li.card").draggable({
-	        		appendTo: 'body',
-	        		containment: 'window',
-	        		helper: 'clone',
-	        		revert: true,
-	        		stack: "li.card",
-	        		start: function(){
-	        			$(this).hide();
-	        		},
-	        		stop: function(){
-	        			$(this).show();
-	        		}
-				});
+	        	$("li.card a").attr("target", "_blank");
 	        });
 	    });
 	};
@@ -63,6 +72,7 @@ function TrelloController($scope) {
 	}
 	
 	$scope.cards = [];
+	$scope.log = [];
 	
 	$scope.settings = {
 		labels: ['green','yellow','orange','red','purple','blue'],
@@ -78,14 +88,21 @@ function TrelloController($scope) {
         ],
 	};
 
+	$scope.debug = function(item) {
+		//$scope.log.push(item);
+		console.log(item);
+	}
+	
 	$scope.cardIsImportant = function(item) {
 		return (item.labels.length > 0)
-			&& item.labels.some(function(i) { return i == $scope.settings.selectedLabel });
+			&& item.labels.some(function(i) { return i != null && i.color != null && i.color == $scope.settings.selectedLabel });
 	};
 	
 	$scope.cardIsUrgent = function(item) {
-		return (item.due != null)
-			&& item.due > $scope.settings.urgentDate;
+		if (!item.due) return false;
+		var dueDate = new Date(item.due);
+		//$scope.debug("Due date: " + dueDate + "; urgent date: " + $scope.settings.urgentDate + " --> " + dueDate <= $scope.settings.urgentDate);
+		return dueDate <= $scope.settings.urgentDate;
 	};
 	
 	$scope.urgentAndImportantFilter = function(item) {
@@ -138,12 +155,12 @@ function TrelloController($scope) {
 	/*
 	 * commented out for offline development
 	 * TODO: modularize and make fault tolerant
+	*/
 	Trello.authorize({
 	    interactive:false,
 	    success: $scope.onAuthorize,
 	    scope: { write: true, read: true }
 	});
-	*/
 	
 	$("#trelloAuthorize").click(function() {
 	    Trello.authorize({
@@ -164,22 +181,16 @@ function TrelloController($scope) {
 		activeClass: "drop-active",
 		hoverClass: "drop-hover",
 		drop: function(event, ui) {
-			var item = angular.element(ui.draggable.context).scope().item;
-			if (item) {
+			var card = angular.element(ui.draggable.context).scope().card;
+			if (card) {
 				$scope.$apply(function() {
-					if (!self.cardIsUrgent(item)) {
-						item.due = new Date();
+					if (!$scope.cardIsUrgent(card)) {
+						card.due = (new Date()).toJSON();
 					}
 					
-					if (!self.cardIsImportant(item)) {
-						item.labels.push("red");
+					if (!$scope.cardIsImportant(card)) {
+						card.labels.push("red");
 					}
-				});
-				
-	        	$("li.card").draggable({
-	        		containment: "document",
-	        		revert: true,
-	        		stack: "li.card",
 				});
 			}
 		},
